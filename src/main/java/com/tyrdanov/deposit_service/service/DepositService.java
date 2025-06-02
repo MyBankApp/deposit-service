@@ -3,6 +3,7 @@ package com.tyrdanov.deposit_service.service;
 import org.springframework.stereotype.Service;
 
 import com.tyrdanov.deposit_service.dto.DepositRequest;
+import com.tyrdanov.deposit_service.dto.GetDepositRequest;
 import com.tyrdanov.deposit_service.dto.InterestResponse;
 import com.tyrdanov.deposit_service.mapper.DepositMapper;
 import com.tyrdanov.deposit_service.model.Deposit;
@@ -19,6 +20,14 @@ public class DepositService {
     private final DepositRepository depositRepository;
     private final DepositProductRepository productRepository;
     private final InterestCalculationService interestService;
+
+    public Deposit getByUserId(GetDepositRequest request) {
+        final var userId = request.getUserId();
+        
+        return depositRepository
+                .findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("Deposit not found"));
+    }
 
     public Deposit openDeposit(DepositRequest request) {
         final var productId = request.getProductId();
